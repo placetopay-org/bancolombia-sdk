@@ -1,0 +1,13 @@
+{
+    "name": "placetopay/bancolombia-sdk",
+    "description": "A library to connect with Bancolombia APIs",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Diego Calle",
+            "email": "dnetix@gmail.com"
+        }
+    ],
+    "require": {}
+}

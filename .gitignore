@@ -1,2 +1,4 @@
 .idea/
 /vendor/
+tests/coverage/
+.php_cs.cache

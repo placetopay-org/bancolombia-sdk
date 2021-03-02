@@ -61,8 +61,17 @@ Although you should really rely on the callback to know the state of a payment, 
 ```php
 try {
     $result = $bancolombia->query('TRANSFER_CODE');
-    if ($result->isHealthy()) {
-        // All OK
+    if ($result->isApproved()) {
+        // Well, they pay you, handle it, also you can use the reference and authorization for example to link the info
+        // if you require it
+    }
+    
+    if ($result->isPending()) {
+        // They can still pay you
+    }
+    
+    if ($result->isRejected()) {
+        // There will be no money
     }
 } catch (\PlacetoPay\BancolombiaSDK\Exceptions\BancolombiaException $e) {
     // Handle the exception

@@ -14,6 +14,8 @@ class ExternalSystemMock extends BaseClientMock
             return $this->authenticate();
         } elseif (strpos($request->getUri()->getPath(), 'action/registry') !== false) {
             return $this->transferIntent();
+        } elseif (strpos($request->getUri()->getPath(), 'validate') !== false) {
+            return $this->transferQuery();
         } elseif (strpos($request->getUri()->getPath(), 'health') !== false) {
             return $this->healthCheck();
         }
@@ -39,7 +41,7 @@ class ExternalSystemMock extends BaseClientMock
         $parameters = json_decode($this->request->getBody()->getContents(), true);
         $parameters = $parameters['data'][0];
 
-        if (strpos('UNAVAILABLE', $parameters['transferReference']) !== false) {
+        if (strpos($parameters['transferReference'], 'UNAVAILABLE') !== false) {
             return $this->response('500', [
                 'meta' => [
                     '_messageId' => '9621d086-02c3-4ce0-b33d-9f551ca377e6',
@@ -83,6 +85,72 @@ class ExternalSystemMock extends BaseClientMock
                     'redirectURL' => 'https://sandbox-boton-dev.apps.ambientesbc.com/web/transfer-gateway/checkout/' . $code,
                 ],
             ],
+        ]);
+    }
+
+    private function transferQuery()
+    {
+        preg_match('/transfer\/(\w+)\/action/', $this->request->getUri()->getPath(), $matches);
+
+        if (!($reference = $matches[1] ?? null)) {
+            return $this->response(500, []);
+        }
+
+        if (strpos($reference, 'PEND') !== false) {
+            $data = [
+                [
+                    'header' => [
+                        'type' => 'Transference',
+                        'id' => $reference,
+                    ],
+                    'transferState' => 'pending',
+                    'transferStateDescription' => null,
+                    'transferVoucher' => null,
+                    'transferDate' => null,
+                    'transferReference' => '1614721251',
+                    'transferAmount' => 3458,
+                ],
+            ];
+        } elseif (strpos($reference, 'REJE') !== false) {
+            $data = [
+                [
+                    'header' => [
+                        'type' => 'Transference',
+                        'id' => $reference,
+                    ],
+                    'transferState' => 'rejected',
+                    'transferStateDescription' => 'Expired',
+                    'transferVoucher' => null,
+                    'transferDate' => null,
+                    'transferReference' => '1614721251',
+                    'transferAmount' => 3458,
+                ],
+            ];
+        } else {
+            $data = [
+                [
+                    'header' => [
+                        'type' => 'Transference',
+                        'id' => $reference,
+                    ],
+                    'transferState' => 'approved',
+                    'transferStateDescription' => null,
+                    'transferVoucher' => 'TRjJvCHT8qNj',
+                    'transferDate' => '2021-03-02T14:57:27',
+                    'transferReference' => '1614714969',
+                    'transferAmount' => 3458,
+                ],
+            ];
+        }
+
+        return $this->response(200, [
+            'meta' => [
+                '_messageId' => 'ac100199-301d-4df6-b532-be955ab93821',
+                '_version' => '1.0',
+                '_requestDate' => '2021-03-02T14:59:17.649Z',
+                '_clientRequest' => '3b2721e7-1afc-4557-8d90-b0eb20dfde91',
+            ],
+            'data' => $data,
         ]);
     }
 

@@ -3,7 +3,7 @@
 namespace PlacetoPay\BancolombiaSDK\Exceptions;
 
 /**
- * Handles all the basic errors given by the external service
+ * Handles all the basic errors given by the external service.
  */
 class ErrorResponseException extends BancolombiaException
 {
@@ -24,7 +24,7 @@ class ErrorResponseException extends BancolombiaException
     }
 
     /**
-     * Basic message that the service responds on a failure case
+     * Basic message that the service responds on a failure case.
      * @return string
      */
     public function title()

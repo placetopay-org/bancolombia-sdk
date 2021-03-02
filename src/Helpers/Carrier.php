@@ -69,6 +69,27 @@ class Carrier
         }
     }
 
+    public static function queryCall(Settings $settings, string $code): array
+    {
+        $token = self::authentication($settings);
+
+        try {
+            $response = $settings->client()->get($settings->serviceUrl('transfer/' . $code . '/action/validate'), [
+                'headers' => [
+                    'Authorization' => 'Bearer ' . $token,
+                    'Accept' => 'application/vnd.bancolombia.v1+json',
+                    'Content-Type' => 'application/vnd.bancolombia.v1+json',
+                ],
+            ]);
+
+            return json_decode($response->getBody()->getContents(), true);
+        } catch (BadResponseException $e) {
+            throw ErrorResponseException::fromResponse(
+                json_decode($e->getResponse()->getBody()->getContents(), true)
+            );
+        }
+    }
+
     public static function healthCall(Settings $settings): bool
     {
         $token = self::authentication($settings);

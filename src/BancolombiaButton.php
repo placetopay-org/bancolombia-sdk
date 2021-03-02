@@ -6,6 +6,7 @@ use PlacetoPay\BancolombiaSDK\Entities\HealthResponse;
 use PlacetoPay\BancolombiaSDK\Entities\Settings;
 use PlacetoPay\BancolombiaSDK\Entities\TransferIntentRequest;
 use PlacetoPay\BancolombiaSDK\Entities\TransferIntentResponse;
+use PlacetoPay\BancolombiaSDK\Entities\TransferResponse;
 use PlacetoPay\BancolombiaSDK\Helpers\Carrier;
 
 class BancolombiaButton
@@ -24,6 +25,12 @@ class BancolombiaButton
     {
         $response = Carrier::requestCall($this->settings, new TransferIntentRequest($data, $this->settings->hash()));
         return TransferIntentResponse::parseFromResponse($response);
+    }
+
+    public function query(string $code): TransferResponse
+    {
+        $response = Carrier::queryCall($this->settings, $code);
+        return TransferResponse::parseFromResponse($response);
     }
 
     public function health(): HealthResponse

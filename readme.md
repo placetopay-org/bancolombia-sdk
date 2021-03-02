@@ -49,7 +49,7 @@ try {
     $result->code();
     // Gives the id for the transference process
     $result->id();
-} catch (\PlacetoPay\BancolombiaSDK\Exceptions\RequestException $e) {
+} catch (\PlacetoPay\BancolombiaSDK\Exceptions\BancolombiaException $e) {
     // Handle the exception
 }
 ```
@@ -64,7 +64,7 @@ try {
     if ($result->isHealthy()) {
         // All OK
     }
-} catch (\PlacetoPay\BancolombiaSDK\Exceptions\RequestException $e) {
+} catch (\PlacetoPay\BancolombiaSDK\Exceptions\BancolombiaException $e) {
     // Handle the exception
 }
 ```
@@ -79,7 +79,7 @@ try {
     if ($result->isHealthy()) {
         // All OK
     }
-} catch (\PlacetoPay\BancolombiaSDK\Exceptions\RequestException $e) {
+} catch (\PlacetoPay\BancolombiaSDK\Exceptions\BancolombiaException $e) {
     // Handle the exception
 }
 ```

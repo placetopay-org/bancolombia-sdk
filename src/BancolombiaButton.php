@@ -7,6 +7,7 @@ use PlacetoPay\BancolombiaSDK\Entities\Settings;
 use PlacetoPay\BancolombiaSDK\Entities\TransferIntentRequest;
 use PlacetoPay\BancolombiaSDK\Entities\TransferIntentResponse;
 use PlacetoPay\BancolombiaSDK\Entities\TransferResponse;
+use PlacetoPay\BancolombiaSDK\Exceptions\BancolombiaException;
 use PlacetoPay\BancolombiaSDK\Helpers\Carrier;
 
 class BancolombiaButton
@@ -38,18 +39,22 @@ class BancolombiaButton
         return new HealthResponse(Carrier::healthCall($this->settings));
     }
 
-    public function isValidSign(array $callback): bool
+    public static function handleCallback(array $posted, $secret): TransferResponse
     {
         $check = [
-            $this->settings->secret(),
-            $callback['commerceTransferButtonId'],
-            $callback['transferCode'],
-            $callback['transferAmount'],
-            $callback['transferState'],
+            $secret,
+            $posted['commerceTransferButtonId'],
+            $posted['transferCode'],
+            $posted['transferAmount'],
+            $posted['transferState'],
         ];
 
         $result = hash('sha512', implode('~', $check));
-        return $result == $callback['sign'];
+        if ($result != $posted['sign']) {
+            throw BancolombiaException::forBadSignature();
+        }
+
+        return TransferResponse::parseFromCallback($posted);
     }
 
     public static function load(string $identification, string $secret, array $settings = []): self

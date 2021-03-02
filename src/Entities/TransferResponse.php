@@ -113,4 +113,20 @@ class TransferResponse
             'amount' => $response['data'][0]['transferAmount'],
         ]);
     }
+
+    public static function parseFromCallback(array $response): self
+    {
+        $description = ($response['transferStateDescription'] == 'null') ? null : $response['transferStateDescription'];
+
+        return new self([
+            'meta' => [],
+            'code' => $response['transferCode'],
+            'state' => $response['transferState'],
+            'description' => $description,
+            'authorization' => $response['transferVoucher'],
+            'date' => $response['transferDate'],
+            'reference' => $response['transferReference'],
+            'amount' => $response['transferAmount'],
+        ]);
+    }
 }

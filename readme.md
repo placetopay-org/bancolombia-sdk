@@ -54,6 +54,23 @@ try {
 }
 ```
 
+### Handling the callback
+
+Once a transaction is finished a POST call will be sent to the confirmation URL provided previously, to handle that
+you just need to make that data into an array and pass it to the SDK
+
+```php
+// Assuming that you dont use any framework
+$posted = $_POST;
+
+try {
+    $result = \PlacetoPay\BancolombiaSDK\BancolombiaButton::handleCallback($posted, 'THE_SECRET');
+    // Handle it the same way that querying it
+} catch (\PlacetoPay\BancolombiaSDK\Exceptions\BancolombiaException $e) {
+    // Signature failed, do not trust this information
+}
+```
+
 ### Query the status of a transference
 
 Although you should really rely on the callback to know the state of a payment, this service also provide you with the state of the payment

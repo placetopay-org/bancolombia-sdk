@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use PlacetoPay\BancolombiaSDK\BancolombiaButton;
 use PlacetoPay\BancolombiaSDK\Exceptions\ErrorResponseException;
 use Tests\BaseTestCase;
 
@@ -95,5 +96,38 @@ class TransferIntentTest extends BaseTestCase
         $this->assertEquals('1614721251', $result->reference());
         $this->assertEquals(3458, $result->amount());
         $this->assertEquals('Expired', $result->description());
+    }
+
+    /**
+     * @test
+     */
+    public function it_handles_a_sign_validation_correctly()
+    {
+        // This information is posted to the callback URL so make it an array
+        $posted = [
+            'transferVoucher' => 'TRqjDhF6DpIF',
+            'transferAmount' => '3458.00',
+            'transferStateDescription' => 'null',
+            'sign' => '8f0e15f62156cb3921b4e73f95fcb6a855eca332e1da26b994c5f55fa134129cdb40b49f8489b2cc63b7798f8baf84ea555a84cd1da4648700d3ce3c57da1838',
+            'requestDate' => '2021-03-02T16:58:26.341-0500',
+            'transferState' => 'approved',
+            'transferDate' => '2021-03-02T16:58:26.000-0500',
+            'transferCode' => '_fmN2Gb1n3C',
+            'transferReference' => '1614722266',
+            'commerceTransferButtonId' => 'h4ShG3NER1C',
+        ];
+
+        // Still not sure if is the same application secret, but this way it will work either case
+        $result = BancolombiaButton::handleCallback($posted, '5Fj8eK4rlyUd252L48herdrnEO');
+
+        $this->assertTrue($result->isApproved());
+        $this->assertFalse($result->isPending());
+        $this->assertFalse($result->isRejected());
+        $this->assertEquals('approved', $result->state());
+        $this->assertEquals('TRqjDhF6DpIF', $result->authorization());
+        $this->assertEquals('2021-03-02T16:58:26-05:00', $result->date());
+        $this->assertEquals('1614722266', $result->reference());
+        $this->assertEquals(3458, $result->amount());
+        $this->assertNull($result->description());
     }
 }

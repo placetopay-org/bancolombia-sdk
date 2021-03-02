@@ -20,12 +20,30 @@ class BancolombiaButton
         $this->settings = $settings;
     }
 
+    public function request(array $data): TransferIntentResponse
+    {
+        $response = Carrier::requestCall($this->settings, new TransferIntentRequest($data, $this->settings->hash()));
+        return TransferIntentResponse::parseFromResponse($response);
+    }
 
     public function health(): HealthResponse
     {
         return new HealthResponse(Carrier::healthCall($this->settings));
     }
 
+    public function isValidSign(array $callback): bool
+    {
+        $check = [
+            $this->settings->secret(),
+            $callback['commerceTransferButtonId'],
+            $callback['transferCode'],
+            $callback['transferAmount'],
+            $callback['transferState'],
+        ];
+
+        $result = hash('sha512', implode('~', $check));
+        return $result == $callback['sign'];
+    }
 
     public static function load(string $identification, string $secret, array $settings = []): self
     {

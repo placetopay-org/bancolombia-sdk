@@ -2,7 +2,7 @@
 
 Allows to connect with the payments button provided by Bancolombia
 
-Docs https://developer.bancolombia.com/
+Docs https://developer.bancolombia.com/en/node/2904
 
 ## Installation
 
@@ -12,14 +12,21 @@ composer require placetopay/bancolombia-sdk
 
 ## Usage
 
-### Create an instance of the lirbary
 
-Provide the configuration settings for the process
+
+### Create an instance of the library
+
+Provide the configuration settings for the process, you can find the client ID in the apps page 
+https://developer.bancolombia.com/en/application but the secret will display only when the app is created, after that 
+it cannot be obtained again.
+
+Hash is the value that would be translated to commerceTransferButtonId on them. This value will be provided by them
 
 ```php
-$identification = 'YOUR APP CLIENT ID';
-$secret = 'YOUR APP SECRET';
-$bancolombia = \PlacetoPay\BancolombiaSDK\BancolombiaButton::load($identification, $secret);
+$clientId = 'YOUR APP CLIENT ID';
+$clientSecret = 'YOUR APP SECRET';
+$hash = 'h4ShG3NER1C';
+$bancolombia = \PlacetoPay\BancolombiaSDK\BancolombiaButton::load($clientId, $clientSecret, $hash);
 ```
 
 ### Create a new payment intent
@@ -29,7 +36,6 @@ This will return an URL in which the user should be redirected to complete the p
 ```php
 try {
     $result = $bancolombia->request([
-        'hash' => 'h4ShG3NER1C',
         'reference' => 'YOUR_UNIQUE_REFERENCE',
         'description' => 'SOME TEXT TO DISPLAY',
         'amount' => 32178,

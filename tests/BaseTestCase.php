@@ -18,8 +18,9 @@ class BaseTestCase extends TestCase
         }
 
         return BancolombiaButton::load(
-            $settings['identification'] ?? 'mock-client-id',
-            $settings['secret'] ?? 'mock-client-secret',
+            $settings['identification'] ?? 'test-client',
+            $settings['secret'] ?? 'test-secret',
+            $settings['hash'] ?? 'h4ShG3NER1C',
             $settings
         );
     }

@@ -57,11 +57,12 @@ class BancolombiaButton
         return TransferResponse::parseFromCallback($posted);
     }
 
-    public static function load(string $identification, string $secret, array $settings = []): self
+    public static function load(string $identification, string $secret, string $hash, array $settings = []): self
     {
         return new self(new Settings(array_replace([
             'identification' => $identification,
             'secret' => $secret,
+            'hash' => $hash,
         ], $settings)));
     }
 }

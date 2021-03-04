@@ -41,6 +41,27 @@ class ExternalSystemMock extends BaseClientMock
         $parameters = json_decode($this->request->getBody()->getContents(), true);
         $parameters = $parameters['data'][0];
 
+        if (empty($parameters['commerceTransferButtonId']) || $parameters['commerceTransferButtonId'] !== 'h4ShG3NER1C') {
+            return $this->response(400, [
+                'meta' => [
+                    '_messageId' => '544f0085-f175-4a83-bb63-be955ab935a2',
+                    '_version' => '1.0',
+                    '_requestDate' => '2021-03-04T15:31:30.908Z',
+                    '_responseSize' => 1,
+                    '_clientRequest' => '3b2721e7-1afc-4557-8d90-b0eb20dfde91',
+                ],
+                'errors' => [
+                    [
+                        'href' => 'https://tools.ietf.org/html/rfc7231#section-6.5.1',
+                        'status' => '400',
+                        'code' => 'BP400',
+                        'title' => 'Bad Request',
+                        'detail' => 'El botón no existe.',
+                    ],
+                ],
+            ]);
+        }
+
         if (strpos($parameters['transferReference'], 'UNAVAILABLE') !== false) {
             return $this->response('500', [
                 'meta' => [

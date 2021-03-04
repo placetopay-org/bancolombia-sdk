@@ -12,8 +12,6 @@ composer require placetopay/bancolombia-sdk
 
 ## Usage
 
-
-
 ### Create an instance of the library
 
 Provide the configuration settings for the process, you can find the client ID in the apps page 
@@ -88,7 +86,7 @@ try {
     }
     
     if ($result->isRejected()) {
-        // There will be no money
+        // There will be no money, you can try it again
     }
 } catch (\PlacetoPay\BancolombiaSDK\Exceptions\BancolombiaException $e) {
     // Handle the exception

@@ -90,10 +90,10 @@ class TransferIntentTest extends BaseTestCase
         $this->assertFalse($result->isApproved());
         $this->assertFalse($result->isPending());
         $this->assertTrue($result->isRejected());
-        $this->assertEquals('pending', $result->state());
+        $this->assertEquals('rejected', $result->state());
         $this->assertNull($result->authorization());
         $this->assertNull($result->date());
-        $this->assertEquals('1614721251', $result->reference());
+        $this->assertEquals('1614721290', $result->reference());
         $this->assertEquals(3458, $result->amount());
         $this->assertEquals('Expired', $result->description());
     }

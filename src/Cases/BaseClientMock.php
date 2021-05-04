@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Cases;
+namespace PlacetoPay\BancolombiaSDK\Cases;
 
 use GuzzleHttp\Promise\FulfilledPromise;
 use GuzzleHttp\Psr7\Response;

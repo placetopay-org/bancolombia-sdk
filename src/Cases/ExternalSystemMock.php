@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Cases;
+namespace PlacetoPay\BancolombiaSDK\Cases;
 
 use Psr\Http\Message\RequestInterface;
 

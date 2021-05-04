@@ -6,7 +6,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\HandlerStack;
 use PHPUnit\Framework\TestCase;
 use PlacetoPay\BancolombiaSDK\BancolombiaButton;
-use Tests\Cases\ExternalSystemMock;
+use PlacetoPay\BancolombiaSDK\Cases\ExternalSystemMock;
 
 class BaseTestCase extends TestCase
 {

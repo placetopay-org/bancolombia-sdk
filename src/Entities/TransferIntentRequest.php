@@ -2,6 +2,8 @@
 
 namespace PlacetoPay\BancolombiaSDK\Entities;
 
+use PlacetoPay\BancolombiaSDK\Exceptions\BancolombiaException;
+
 class TransferIntentRequest
 {
     protected $hash;
@@ -19,6 +21,18 @@ class TransferIntentRequest
         $this->amount = $data['amount'];
         $this->returnUrl = $data['returnUrl'];
         $this->confirmationUrl = $data['confirmationUrl'];
+
+        if ($this->amount <= 0) {
+            throw BancolombiaException::forInvalidRequest('amount');
+        }
+
+        if (!filter_var($this->returnUrl, FILTER_VALIDATE_URL)) {
+            throw BancolombiaException::forInvalidRequest('returnUrl');
+        }
+
+        if (!filter_var($this->confirmationUrl, FILTER_VALIDATE_URL)) {
+            throw BancolombiaException::forInvalidRequest('confirmationUrl');
+        }
     }
 
     public function asRequest(): array

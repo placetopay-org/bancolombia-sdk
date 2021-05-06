@@ -2,7 +2,7 @@
 
 Allows to connect with the payments button provided by Bancolombia
 
-Docs https://developer.bancolombia.com/en/node/2904
+Docs https://developer.bancolombia.com/en/node/3252
 
 ## Installation
 

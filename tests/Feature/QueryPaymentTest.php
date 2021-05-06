@@ -17,6 +17,7 @@ class QueryPaymentTest extends BaseTestCase
         $this->assertTrue($response->isApproved());
         $this->assertEquals(3458, $response->amount());
         $this->assertEquals('1614714969', $response->reference());
+        $this->assertEquals('00', $response->reason());
     }
 
     /**
@@ -30,6 +31,7 @@ class QueryPaymentTest extends BaseTestCase
         $this->assertTrue($response->isPending());
         $this->assertEquals(3458, $response->amount());
         $this->assertEquals('1614721251', $response->reference());
+        $this->assertEquals('?-', $response->reason());
     }
 
     /**
@@ -43,5 +45,6 @@ class QueryPaymentTest extends BaseTestCase
         $this->assertTrue($response->isRejected());
         $this->assertEquals(3458, $response->amount());
         $this->assertEquals('1614721290', $response->reference());
+        $this->assertEquals('54', $response->reason());
     }
 }

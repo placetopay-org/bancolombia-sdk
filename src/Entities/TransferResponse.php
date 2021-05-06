@@ -100,6 +100,34 @@ class TransferResponse
         return $this->state() === self::ST_REJECTED;
     }
 
+    /**
+     * Parses the response to return an iso code for this.
+     * @return string
+     */
+    public function reason(): string
+    {
+        if ($this->isPending()) {
+            return '?-';
+        }
+
+        if ($this->isApproved()) {
+            return '00';
+        }
+
+        $states = [
+            'Expired' => '54',
+            'No registry' => '78',
+            'Timeout' => '19',
+            'Invalid account' => '12',
+            'Rejected' => '05',
+            'Rejected by security' => '59',
+            'System error' => '06',
+            'Unsupported Browser' => '96',
+        ];
+
+        return $states[$this->description()] ?? '05';
+    }
+
     public static function parseFromResponse(array $response): self
     {
         return new self([

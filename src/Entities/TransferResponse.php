@@ -16,9 +16,9 @@ class TransferResponse
      */
     protected $meta;
 
-    const ST_APPROVED = 'approved';
-    const ST_PENDING = 'pending';
-    const ST_REJECTED = 'rejected';
+    public const ST_APPROVED = 'approved';
+    public const ST_PENDING = 'pending';
+    public const ST_REJECTED = 'rejected';
 
     public function __construct(array $data)
     {

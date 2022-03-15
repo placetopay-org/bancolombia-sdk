@@ -3,6 +3,7 @@
 namespace PlacetoPay\BancolombiaSDK\Parsers;
 
 use GuzzleHttp\Exception\BadResponseException;
+use PlacetoPay\BancolombiaSDK\Entities\Settings;
 use PlacetoPay\Base\Messages\Transaction;
 use PlacetoPay\Tangram\Contracts\CarrierDataObjectContract;
 use PlacetoPay\Tangram\Contracts\ParserHandlerContract;
@@ -11,31 +12,19 @@ use PlacetoPay\Tangram\Entities\BaseSettings;
 class HealtParser implements ParserHandlerContract
 {
     private BaseSettings $settings;
+    private string $token;
 
-    public function __construct(BaseSettings $settings)
+    public function __construct(Settings $settings, string $token)
     {
         $this->settings = $settings;
+        $this->token = $token;
     }
 
     public function parserRequest(CarrierDataObjectContract $carrierDataObject): array
     {
-        $token = $this->settings->get('token');
-
-        try {
-            $response = $settings->client()->head($settings->serviceUrl('bancolombia-button-transference-management/health'), [
-                'headers' => [
-                    'Authorization' => 'Bearer ' . $token,
-                    'Accept' => 'application/vnd.bancolombia.v1+json',
-                    'Content-Type' => 'application/vnd.bancolombia.v1+json',
-                ],
-            ]);
-            $response->getStatusCode() == 200;
-        } catch (BadResponseException $e) {
-        }
-
         return [
             'headers' => [
-                'Authorization' => 'Bearer ' . $token,
+                'Authorization' => 'Bearer ' . $this->token,
                 'Accept' => 'application/vnd.bancolombia.v1+json',
                 'Content-Type' => 'application/vnd.bancolombia.v1+json',
             ],
@@ -44,7 +33,7 @@ class HealtParser implements ParserHandlerContract
 
     public function parserResponse(CarrierDataObjectContract $carrierDataObject): Transaction
     {
-        // TODO: Implement parserResponse() method.
+        return $carrierDataObject->response()->status()->isSuccessful();
     }
 
     public function errorHandler(CarrierDataObjectContract $carrierDataObject): Transaction

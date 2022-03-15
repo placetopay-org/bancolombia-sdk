@@ -5,16 +5,11 @@ namespace PlacetoPay\BancolombiaSDK\Entities;
 use GuzzleHttp\Client;
 use PlacetoPay\BancolombiaSDK\Helpers\Cache;
 use PlacetoPay\BancolombiaSDK\Helpers\Logger;
+use PlacetoPay\Tangram\Entities\BaseSettings;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class Settings
+class Settings extends BaseSettings
 {
-    protected $identification;
-    protected $secret;
-    protected $hash;
-
-    protected $authUrl;
-    protected $serviceUrl;
-
     /**
      * @var Client
      */
@@ -22,49 +17,28 @@ class Settings
     /**
      * @var Logger
      */
-    protected $logger;
+    protected Logger $logger;
     /**
      * @var Cache
      */
-    protected $cache;
+    protected Cache $cache;
 
-    public function __construct(array $settings)
+    /**
+     * @throws \PlacetoPay\Tangram\Exceptions\InvalidSettingException
+     */
+    public function __construct(array $settings, OptionsResolver $optionsResolver = null)
     {
-        $this->identification = $settings['identification'] ?? '';
-        $this->secret = $settings['secret'] ?? '';
-        $this->hash = $settings['hash'] ?? '';
-
-        $this->authUrl = $settings['authUrl'] ?? 'https://api.us.apiconnect.ibmcloud.com/bancolombiabluemix-dev/sandbox/v1/security/oauth-otp-pymes/oauth2/token';
-        $this->serviceUrl = $settings['serviceUrl'] ?? 'https://sbapi.bancolombia.com/v2/operations/cross-product/payments/payment-order/';
+        $settings['identification'] = $settings['identification'] ?? '';
+        $settings['secret'] = $settings['secret'] ?? '';
+        $settings['hash'] = $settings['hash'] ?? '';
+        $settings['authUrl'] = $settings['authUrl'] ?? 'https://api.us.apiconnect.ibmcloud.com/bancolombiabluemix-dev/sandbox/v1/security/oauth-otp-pymes/oauth2/token';
+        $settings['serviceUrl'] = $settings['serviceUrl'] ?? 'https://sbapi.bancolombia.com/v2/operations/cross-product/payments/payment-order/';
 
         $this->logger = new Logger($settings['logger'] ?? null);
         $this->cache = new Cache($settings['cache'] ?? null);
         $this->client = $settings['client'] ?? new Client();
-    }
 
-    public function identification(): string
-    {
-        return $this->identification;
-    }
-
-    public function secret(): string
-    {
-        return $this->secret;
-    }
-
-    public function authUrl(): string
-    {
-        return $this->authUrl;
-    }
-
-    public function hash()
-    {
-        return $this->hash;
-    }
-
-    public function serviceUrl(string $path = '')
-    {
-        return $this->serviceUrl . $path;
+        parent::__construct($settings, $optionsResolver);
     }
 
     public function client(): Client
